@@ -1,17 +1,15 @@
 // Copyright (c) 2022 Yiyun Qin All rights reserved
 //
 // Created by Yiyun Qin
-// Created in May 2022
+// Created in June 2022
 // This is a math program, translating a string to hex
 
 #include <iostream>
 #include <string>
-#include <list>
 #include <map>
 
-std::list<std::string> Translate(std::string inputString) {
+std::string Translate(int loopCounter, std::string inputString) {
     // This function translates the string
-    std::list<std::string> answerList;
     std::map<std::string, std::string> dictionary = {
         {" ", "0x20"},
         {"!", "0x21"},
@@ -112,16 +110,12 @@ std::list<std::string> Translate(std::string inputString) {
 
     // process & output
     std::string answer;
-    for (int loopCounter = 0; loopCounter < inputString.length(); loopCounter++) {
-        if (dictionary.count(inputString[loopCounter]) > 0) {
-            answer = dictionary[inputString[loopCounter]];
-            answerList.push_back(answer);
-        } else {
-            answer = -1;
-            answerList.push_back(answer);
-        }
+    if (dictionary.count(std::string(1, inputString[loopCounter])) > 0) {
+        answer = dictionary[std::string(1, inputString[loopCounter])];
+    } else {
+        answer = "-1";
     }
-    return answerList;
+    return answer;
 }
 
 
@@ -129,21 +123,27 @@ int main() {
     // This function does try and catch
     std::string inputString;
     std::string inputFirst;
-    std::list<std::string> outputString;
+    std::string inputA;
 
     // input
+    std::cout << "If the translated result is -1, " <<
+    "that means this input can't be translate into hex." << std::endl;
     std::cout << "Please enter in a string to be translated into hex: ";
-    std::cin >> inputFirst;
+    std::getline(std::cin, inputFirst);
 
     // process
     std::cout << "" << std::endl;
-    try {
-        inputString = std::to_string(inputString);
-        // call functions
-        outputString = Translate(inputString);
-        std::cout << inputString << " in hex is " << outputString << "." << std::endl;
-    } catch (std::invalid_argument) {
-        std::cout << "Invalid number!" << std::endl;
+    // call functions
+    std::cout << inputFirst << " in hex is [";
+    for (int loopCounter1 = 0; loopCounter1
+    < inputFirst.length(); loopCounter1++) {
+        inputA = Translate(loopCounter1, inputFirst);
+        if (loopCounter1 != inputFirst.length() - 1) {
+            std::cout << "'" << inputA << "', ";
+        } else {
+            std::cout << "'" << inputA << "'";
+        }
     }
-    std::cout << "\nDone." << std::endl;
+    std::cout << "].";
+    std::cout << "\n\nDone." << std::endl;
 }
